@@ -49,7 +49,7 @@ Nous avons importé ce hook dans `ProductSearch.js` et remplacé l'utilisation d
 
 ![Description de l'image](images/Screen1.2.png)  
 
-## Exercice 2 : État et Effets
+## Exercice 2 : Context et Internationalisation 
 
  🛠️**2.1. Utilisation de `useContext` pour partager l'état de recherch**
 
@@ -87,8 +87,8 @@ la page conserve "a" la dernière lettre saisie de recherche après son recharge
 
 Un bouton « Recharger » a été ajouté au-dessus du champ de recherche. Il permet :
 
--->de réinitialiser le champ de recherche,
--->de revenir automatiquement à la page 1,
+**de réinitialiser le champ de recherche**
+**de revenir automatiquement à la page 1**
 
 ![Description de l'image](images/Recharge.png) 
 
@@ -96,8 +96,8 @@ Un bouton « Recharger » a été ajouté au-dessus du champ de recherche. Il pe
 
 La pagination permet d'afficher 3 produits par page : 
 
--->Deux boutons « Précédent » et « Suivant » permettent de naviguer entre les pages.
--->La pagination s’ajuste dynamiquement selon le résultat de la recherche.
+**Deux boutons « Précédent » et « Suivant » permettent de naviguer entre les pages**
+**La pagination s’ajuste dynamiquement selon le résultat de la recherche**
 
 Le bouton précédent est désactivé en page 1  
 
