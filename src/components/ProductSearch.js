@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { useState, useEffect, useContext } from 'react';
+import useDebounce from '../hooks/useDebounce';
+import { LanguageContext } from '../LanguageContext';
 const products = [
   {
     id: 1,
@@ -43,25 +44,28 @@ const products = [
 
 const ProductSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const [filteredProducts, setFilteredProducts] = useState(products);
 
+  const { t } = useContext(LanguageContext); 
+
   useEffect(() => {
-    if (!searchTerm) {
+    if (!debouncedSearchTerm) {
       setFilteredProducts(products);
     } else {
       const filtered = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        product.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
       );
       setFilteredProducts(filtered);
     }
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
       <h2 style={{ textAlign: 'center', marginBottom: 20 }}>Search Products</h2>
       <input
         type="text"
-        placeholder="Rechercher un produit..."
+        placeholder={t.searchPlaceholder} 
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         style={{
@@ -102,7 +106,9 @@ const ProductSearch = () => {
             </li>
           ))
         ) : (
-          <li style={{ textAlign: 'center', color: '#888', fontStyle: 'italic' }}>Aucun produit trouvé</li>
+          <li style={{ textAlign: 'center', color: '#888', fontStyle: 'italic' }}>
+            Aucun produit trouvé
+          </li>
         )}
       </ul>
     </div>
