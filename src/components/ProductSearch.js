@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import useDebounce from '../hooks/useDebounce';
-import { LanguageContext } from '../LanguageContext';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { LanguageContext } from '../LanguageContext';
+
 const products = [
   {
     id: 1,
@@ -40,15 +41,19 @@ const products = [
     image: '/images/apple_headphones.jpg',
     description: 'Casque circum-aural avec réduction active de bruit, son spatial, autonomie jusqu’à 20h.',
   },
-  
 ];
 
-const ProductSearch = () => { 
-const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
+const ProductSearch = () => {
+  
+  const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const [filteredProducts, setFilteredProducts] = useState(products);
 
-  const { t } = useContext(LanguageContext); 
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 3;
+
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     if (!debouncedSearchTerm) {
@@ -59,29 +64,61 @@ const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
       );
       setFilteredProducts(filtered);
     }
+    
+    setCurrentPage(1);
   }, [debouncedSearchTerm]);
+
+  
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  // --- Fonctions de pagination
+  const handlePrevPage = () => {
+    setCurrentPage(prev => (prev > 1 ? prev - 1 : prev));
+  };
+
+  const handleNextPage = () => {
+    const maxPage = Math.ceil(filteredProducts.length / productsPerPage);
+    setCurrentPage(prev => (prev < maxPage ? prev + 1 : prev));
+  };
+
+  // --- Fonction bouton rechargement ---
+  const handleReload = () => {
+    setSearchTerm('');
+    setCurrentPage(1);
+    setFilteredProducts(products);
+  };
 
   return (
     <div style={{ maxWidth: 600, margin: '0 auto', fontFamily: 'Arial, sans-serif' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: 20 }}>Search Products</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: 20 }}>{t.searchTitle || 'Search Products'}</h2>
+
+      {/* --- Bouton Recharger à ajouter ici --- */}
+      <button onClick={handleReload} style={{ marginBottom: 10, padding: '8px 12px' }}>
+        Recharger
+      </button>
+
       <input
         type="text"
-        placeholder={t.searchPlaceholder} 
+        placeholder={t.searchPlaceholder}
         value={searchTerm}
         onChange={e => setSearchTerm(e.target.value)}
         style={{
           padding: '10px',
           width: '100%',
           boxSizing: 'border-box',
-          marginBottom: '30px',
+          marginBottom: '20px',
           fontSize: '16px',
           borderRadius: '4px',
           border: '1px solid #ccc',
         }}
       />
+
       <ul style={{ padding: 0, listStyle: 'none' }}>
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map(product => (
+        {/* --- Remplacer filteredProducts par currentProducts --- */}
+        {currentProducts.length > 0 ? (
+          currentProducts.map(product => (
             <li
               key={product.id}
               style={{
@@ -108,10 +145,26 @@ const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
           ))
         ) : (
           <li style={{ textAlign: 'center', color: '#888', fontStyle: 'italic' }}>
-            Aucun produit trouvé
+            {t.noProductsFound || 'Aucun produit trouvé'}
           </li>
         )}
       </ul>
+
+      {/* --- Pagination à ajouter ici --- */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+          Précédent
+        </button>
+        <span>
+          {currentPage} / {Math.ceil(filteredProducts.length / productsPerPage)}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === Math.ceil(filteredProducts.length / productsPerPage)}
+        >
+          Suivant
+        </button>
+      </div>
     </div>
   );
 };
