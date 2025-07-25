@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import useDebounce from '../hooks/useDebounce';
 import { LanguageContext } from '../LanguageContext';
+import useLocalStorage from '../hooks/useLocalStorage';
 const products = [
   {
     id: 1,
@@ -42,8 +43,8 @@ const products = [
   
 ];
 
-const ProductSearch = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+const ProductSearch = () => { 
+const [searchTerm, setSearchTerm] = useLocalStorage('searchTerm', '');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const [filteredProducts, setFilteredProducts] = useState(products);
 

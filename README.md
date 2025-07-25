@@ -10,6 +10,23 @@ Ce TP a pour objectif de mettre en pratique l'utilisation des Hooks React (`useS
 
 ---
 
+ Configuration
+ ---------------
+ 1. Cloner le dépôt 
+ 'git clone https://github.com/pr-daaif/tp-react-hooks.git'
+ 'cd tp-react-hooks'
+
+ 2. Changement de remote
+ 'git remote remove origin'
+ 'git remote add origin https://github.com/ZAINABELARABI/TP-React-hooks'
+ 'git push -u origin main'
+
+ 3. Installation des dépendances
+ 'npm install'
+
+ 4. Lancement de l'application
+ 'npm start'
+
 ## Exercice 1 : État et Effets
 
 
@@ -21,6 +38,7 @@ Filtrage dynamique des produits affichés selon le texte saisi.
 ![Description de l'image](images/Screen1.png)  
 
 🛠️ **1.2.Implémentation de debounce sur la recherche**
+
 Pour éviter de lancer la recherche à chaque frappe au clavier, nous avons utilisé un **hook personnalisé `useDebounce`** qui attend un délai de 500ms avant de mettre à jour le terme recherché. Cela réduit les appels inutiles et améliore les performances.
 
 Nous avons importé ce hook dans `ProductSearch.js` et remplacé l'utilisation directe de `searchTerm` dans le `useEffect` par `debouncedSearchTerm`.
@@ -28,12 +46,15 @@ Nous avons importé ce hook dans `ProductSearch.js` et remplacé l'utilisation d
 ![Description de l'image](images/Screen1.2.png)  
 
 ## Exercice 2 : État et Effets
+
 ### 2.1. Utilisation de `useContext` pour partager l'état de recherch
+
 Nous avons créé un contexte `SearchContext` pour partager l'état de recherche entre les
 composants. Nous avons utilisé `useContext` pour accéder à cet état
 dans `ProductSearch.js` et `ProductList.js`.
 
 ### 2.2. Ajout de sélecteur de langue (LanguageSelector.js)
+
 Nous avons créé un composant `LanguageSelector` qui utilise le contexte `LanguageContext`. Il affiche un menu déroulant avec les options : Français, Anglais et Espagnol.
 
 🛠️ option English
@@ -41,3 +62,17 @@ Nous avons créé un composant `LanguageSelector` qui utilise le contexte `Langu
 
 🛠️ option Espagnol
 ![Description de l'image](images/Esp.png)  
+
+## Exercice 3 : Hooks personnalisés
+
+### 3.1. Hook UseDebounce
+
+Ce hook permet de "débouncer" une valeur, c’est-à-dire de ne mettre à jour cette valeur qu’après un certain délai sans changement. Cela évite par exemple de lancer une recherche à chaque frappe, mais seulement après que l’utilisateur ait fini de taper.
+
+### 3.2. Hook LocalStorage
+
+Ce hook permet de conserver le dernier terme recherché même après un rafraîchissement, améliorant ainsi l’expérience utilisateur.
+
+la page conserve "a" la dernière lettre saisie de recherche après son rechargement 
+![Description de l'image](images/3.png) 
+
